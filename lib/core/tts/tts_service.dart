@@ -13,10 +13,8 @@ class TtsService {
     _isInitializing = true;
 
     try {
-      // 1. Обов'язково чекаємо готовності нативного Handler
       await _tts.awaitSpeakCompletion(true);
 
-      // 2. Встановлюємо основні параметри (БЕЗ setEngine)
       await _tts.setLanguage("en-US");
       await _tts.setSpeechRate(0.35);
       // await _tts.setVolume(1.0);
