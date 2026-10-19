@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:developer' as dev;
 
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -30,7 +31,7 @@ class TtsService {
 
       _isInitialized = true;
     } catch (e) {
-      print("[TtsService] Init failed: $e");
+      dev.log("[TtsService] Init failed: $e");
     } finally {
       _isInitializing = false;
     }
@@ -44,7 +45,7 @@ class TtsService {
     }
 
     if (!_isInitialized) {
-      print("[TtsService] Engine not available, skipping speak.");
+      dev.log("[TtsService] Engine not available, skipping speak.");
       return;
     }
 
@@ -52,7 +53,7 @@ class TtsService {
       await _tts.stop();
       await _tts.speak(text);
     } catch (e) {
-      print("[TtsService] Speak error: $e");
+      dev.log("[TtsService] Speak error: $e");
     }
   }
 
@@ -60,7 +61,7 @@ class TtsService {
     try {
       await _tts.stop();
     } catch (e) {
-      print("[TtsService] Stop error: $e");
+      dev.log("[TtsService] Stop error: $e");
     }
   }
 }
