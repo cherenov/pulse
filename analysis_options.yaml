@@ -8,9 +8,6 @@ analyzer:
     - windows/**
     - linux/**
 
-  plugins:
-    - custom_lint
-
 custom_lint:
   rules:
 
