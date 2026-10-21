@@ -16,18 +16,54 @@ class _HomeSreenState extends ConsumerState<HomeScreen> {
 
   static final List<NavItem> _navItems = [
     const NavItem(
-      screen: Scaffold(),
+      screen: Scaffold(
+        body: Center(
+          child: Text(
+            "Dashboard",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 40),
+          ),
+        ),
+      ),
       icon: Icons.dashboard,
       label: 'Dashboard',
     ),
-    const NavItem(screen: Scaffold(), icon: Icons.history, label: 'History'),
     const NavItem(
-      screen: Scaffold(),
+      screen: Scaffold(
+        body: Center(
+          child: Text(
+            "History",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 40),
+          ),
+        ),
+      ),
+      icon: Icons.history,
+      label: 'History',
+    ),
+    const NavItem(
+      screen: Scaffold(
+        body: Center(
+          child: Text(
+            "Analytics",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 40),
+          ),
+        ),
+      ),
       icon: Icons.bar_chart_rounded,
       label: 'Analytics',
     ),
     const NavItem(
-      screen: Scaffold(),
+      screen: Scaffold(
+        body: Center(
+          child: Text(
+            "Settings",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 40),
+          ),
+        ),
+      ),
       icon: Icons.settings_outlined,
       selectedIcon: Icons.settings,
       label: 'Settings',

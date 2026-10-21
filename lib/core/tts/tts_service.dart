@@ -7,6 +7,9 @@ class TtsService {
   final FlutterTts _tts = FlutterTts();
   bool _isInitialized = false;
   bool _isInitializing = false;
+  int a = 0;
+  String txt = 'tst';
+  double iw = 2.3;
 
   Future<void> init() async {
     if (_isInitialized || _isInitializing) return;
@@ -17,8 +20,8 @@ class TtsService {
 
       await _tts.setLanguage("en-US");
       await _tts.setSpeechRate(0.35);
-      // await _tts.setVolume(1.0);
-      await _tts.setPitch(0.7);
+      // await _tts.setVolume(0.7);
+      await _tts.setPitch(1);
 
       if (Platform.isIOS) {
         await _tts.setIosAudioCategory(IosTextToSpeechAudioCategory.playback, [
