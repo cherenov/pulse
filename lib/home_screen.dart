@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pulse/common/models/nav_item.dart';
 import 'package:pulse/common/widgets/floating_bottom_nav_bar.dart';
+import 'package:pulse/features/dashboard/dashboard_screen.dart';
 import 'package:pulse/theme/app_colors.dart';
 
 class SelectedIndexNotifier extends Notifier<int> {
@@ -20,7 +21,7 @@ class HomeScreen extends ConsumerWidget {
 
   static final List<NavItem> _navItems = [
     const NavItem(
-      screen: _StubScreen(title: 'Dashboard'),
+      screen: DashboardScreen(),
       icon: Icons.dashboard,
       label: 'Dashboard',
     ),
