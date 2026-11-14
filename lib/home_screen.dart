@@ -7,7 +7,6 @@ import 'package:pulse/core/tts/tts_provider.dart';
 import 'package:pulse/features/add_metrics/add_record_screen.dart';
 import 'package:pulse/features/dashboard/dashboard_screen.dart';
 import 'package:pulse/features/debug/debug_screen.dart';
-import 'package:pulse/features/indicators/indicator_detail_screen.dart';
 import 'package:pulse/features/indicators/indicator_group_screen.dart';
 import 'package:pulse/features/settings/settings_screen.dart';
 
