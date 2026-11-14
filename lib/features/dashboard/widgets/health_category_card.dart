@@ -32,7 +32,10 @@ class HealthCategoryCard extends StatelessWidget {
     Color tint(Color color, double amount) =>
         Color.lerp(AppColors.surface, color, amount)!;
 
-    if (critical > 0 && review > 0) {
+    final hasCritical = critical > 0;
+    final hasReview = review > 0;
+
+    if (hasCritical && hasReview) {
       return LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -87,7 +90,9 @@ class HealthCategoryCard extends StatelessWidget {
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 22),
+
                     Text(
                       title,
                       maxLines: 2,
@@ -98,7 +103,9 @@ class HealthCategoryCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+
                     const SizedBox(height: 6),
+
                     Text(
                       '$total indicators',
                       style: TextStyle(
@@ -106,13 +113,17 @@ class HealthCategoryCard extends StatelessWidget {
                         fontSize: compact ? 13 : 16,
                       ),
                     ),
+
                     const Spacer(),
+
                     _StatusBar(
                       stable: stable,
                       review: review,
                       critical: critical,
                     ),
+
                     const SizedBox(height: 18),
+
                     Wrap(
                       spacing: 12,
                       runSpacing: 8,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pulse/core/tts/tts_provider.dart';
+// import 'package:flutter/services.dart';
 import 'package:pulse/home_screen.dart';
 import 'package:pulse/theme/theme.dart';
 
@@ -12,8 +13,16 @@ Future<void> initTTS() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // HORIZONTAL ORIENTATION
+  // await SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.landscapeLeft,
+  // ]);
+  // HORIZONTAL ORIENTATION
+
   await initTTS();
-  runApp(const ProviderScope(child: MyApp()));
+
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -21,6 +30,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: theme, home: const HomeScreen());
+    return MaterialApp(theme: theme, home: HomeScreen());
   }
 }
