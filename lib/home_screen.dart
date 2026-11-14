@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pulse/common/models/nav_item.dart';
 import 'package:pulse/common/widgets/floating_bottom_nav_bar.dart';
+import 'package:pulse/core/database/metrics_registory.dart';
 import 'package:pulse/core/tts/tts_provider.dart';
+import 'package:pulse/features/add_metrics/add_record_screen.dart';
 import 'package:pulse/features/dashboard/dashboard_screen.dart';
-import 'package:pulse/theme/app_colors.dart';
+import 'package:pulse/features/debug/debug_screen.dart';
+import 'package:pulse/features/indicators/indicator_detail_screen.dart';
+import 'package:pulse/features/indicators/indicator_group_screen.dart';
 
 class SelectedIndexNotifier extends Notifier<int> {
   @override
@@ -17,6 +21,27 @@ final selectedIndexProvider = NotifierProvider<SelectedIndexNotifier, int>(
   SelectedIndexNotifier.new,
 );
 
+class SelectedMetricGroupNotifier extends Notifier<MetricGroup> {
+  @override
+  MetricGroup build() => MetricGroup.blood;
+
+  void setGroup(MetricGroup group) => state = group;
+}
+
+final selectedMetricGroupProvider =
+    NotifierProvider<SelectedMetricGroupNotifier, MetricGroup>(
+      SelectedMetricGroupNotifier.new,
+    );
+
+final _welcomeTtsProvider = Provider<void>((ref) {
+  ref
+      .read(ttsServiceProvider)
+      .speak(
+        "Welcome to PULSE. WARNING: critical problem detected",
+        speechRate: 0.5,
+      );
+});
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -27,23 +52,23 @@ class HomeScreen extends ConsumerWidget {
       label: 'Dashboard',
     ),
     const NavItem(
-      screen: _StubScreen(title: 'Metrics'),
+      screen: IndicatorsGroupScreen(),
       icon: Icons.bar_chart_rounded,
       label: 'Metrics',
     ),
     const NavItem(
-      screen: _StubScreen(title: 'Add record'),
+      screen: AddRecordScreen(),
       icon: Icons.add_circle_outline,
       label: 'Add record',
     ),
     const NavItem(
-      screen: _StubScreen(title: 'Settings'),
+      screen: IndicatorDetailScreen(metricId: 'bp'),
       icon: Icons.settings_outlined,
       selectedIcon: Icons.settings,
       label: 'Settings',
     ),
     const NavItem(
-      screen: _StubScreen(title: 'Debug'),
+      screen: DebugScreen(),
       icon: Icons.developer_mode_outlined,
       selectedIcon: Icons.developer_mode,
       label: 'Debug',
@@ -52,11 +77,14 @@ class HomeScreen extends ConsumerWidget {
 
   void _onDestinationSelected(WidgetRef ref, int index) {
     ref.read(selectedIndexProvider.notifier).setIndex(index);
-    ref.read(ttsServiceProvider).speak(_navItems[index].label);
+    final label = _navItems[index].label;
+    ref.read(ttsServiceProvider).speak(label);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(_welcomeTtsProvider);
+
     final selectedIndex = ref.watch(selectedIndexProvider);
 
     return Scaffold(
@@ -74,29 +102,6 @@ class HomeScreen extends ConsumerWidget {
                 _onDestinationSelected(ref, index),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _StubScreen extends StatelessWidget {
-  final String title;
-
-  const _StubScreen({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: AppColors.background,
-      child: Center(
-        child: Text(
-          title,
-          style: const TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
       ),
     );
   }

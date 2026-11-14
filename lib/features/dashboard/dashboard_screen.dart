@@ -1,41 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pulse/core/database/db.dart';
+import 'package:pulse/core/database/db_providers.dart';
+import 'package:pulse/core/database/metrics_registory.dart';
 import 'package:pulse/features/dashboard/widgets/health_category_card.dart';
+import 'package:pulse/home_screen.dart';
 import 'package:pulse/theme/app_colors.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
+  ({int stable, int review, int critical}) _groupStats(
+    MetricGroup group,
+    List<Measurement> latest,
+  ) {
+    final latestById = {for (final m in latest) m.metricId: m};
+    var stable = 0;
+    var review = 0;
+    var critical = 0;
+
+    for (final metric in metrics.where((m) => m.group == group)) {
+      final measurement = latestById[metric.id];
+      if (measurement == null) continue;
+
+      switch (metric.status(measurement.values)) {
+        case MetricStatus.ok:
+          stable++;
+        case MetricStatus.warning:
+          review++;
+        case MetricStatus.critical:
+          critical++;
+      }
+    }
+
+    return (stable: stable, review: review, critical: critical);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final latest = ref.watch(latestAllProvider).value ?? [];
+
     final categories = [
-      const _CategoryData(
+      _CategoryData(
         title: 'Blood',
+        group: MetricGroup.blood,
         icon: Icons.water_drop_outlined,
-        stable: 12,
-        review: 3,
-        critical: 1,
+        stats: _groupStats(MetricGroup.blood, latest),
       ),
-      const _CategoryData(
+      _CategoryData(
         title: 'Urine',
+        group: MetricGroup.urine,
         icon: Icons.science_outlined,
-        stable: 1,
-        review: 1,
-        critical: 0,
+        stats: _groupStats(MetricGroup.urine, latest),
       ),
-      const _CategoryData(
+      _CategoryData(
         title: 'Non-invasive',
+        group: MetricGroup.trackers,
         icon: Icons.monitor_heart_outlined,
-        stable: 2,
-        review: 0,
-        critical: 0,
+        stats: _groupStats(MetricGroup.trackers, latest),
       ),
-      const _CategoryData(
+      _CategoryData(
         title: 'Eye health',
+        group: MetricGroup.eyes,
         icon: Icons.visibility_outlined,
-        stable: 1,
-        review: 0,
-        critical: 1,
+        stats: _groupStats(MetricGroup.eyes, latest),
       ),
     ];
 
@@ -47,7 +75,7 @@ class DashboardScreen extends ConsumerWidget {
             final availableWidth = constraints.maxWidth;
             final columns = availableWidth < 380 ? 1 : 2;
             final horizontalPadding = availableWidth < 600 ? 16.0 : 28.0;
-            const spacing = 16.0;
+            const spacing = 14.0;
 
             final cardWidth =
                 (availableWidth -
@@ -58,7 +86,7 @@ class DashboardScreen extends ConsumerWidget {
             return SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(
                 horizontalPadding,
-                36,
+                32,
                 horizontalPadding,
                 130,
               ),
@@ -85,7 +113,7 @@ class DashboardScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 44),
+                  const SizedBox(height: 48),
                   Wrap(
                     spacing: spacing,
                     runSpacing: spacing,
@@ -96,9 +124,17 @@ class DashboardScreen extends ConsumerWidget {
                         child: HealthCategoryCard(
                           title: category.title,
                           icon: category.icon,
-                          stable: category.stable,
-                          review: category.review,
-                          critical: category.critical,
+                          stable: category.stats.stable,
+                          review: category.stats.review,
+                          critical: category.stats.critical,
+                          onTap: () {
+                            ref
+                                .read(selectedMetricGroupProvider.notifier)
+                                .setGroup(category.group);
+                            ref
+                                .read(selectedIndexProvider.notifier)
+                                .setIndex(1);
+                          },
                         ),
                       );
                     }).toList(),
@@ -115,16 +151,14 @@ class DashboardScreen extends ConsumerWidget {
 
 class _CategoryData {
   final String title;
+  final MetricGroup group;
   final IconData icon;
-  final int stable;
-  final int review;
-  final int critical;
+  final ({int stable, int review, int critical}) stats;
 
   const _CategoryData({
     required this.title,
+    required this.group,
     required this.icon,
-    required this.stable,
-    required this.review,
-    required this.critical,
+    required this.stats,
   });
 }
