@@ -9,6 +9,7 @@ import 'package:pulse/features/dashboard/dashboard_screen.dart';
 import 'package:pulse/features/debug/debug_screen.dart';
 import 'package:pulse/features/indicators/indicator_detail_screen.dart';
 import 'package:pulse/features/indicators/indicator_group_screen.dart';
+import 'package:pulse/features/settings/settings_screen.dart';
 
 class SelectedIndexNotifier extends Notifier<int> {
   @override
@@ -62,7 +63,7 @@ class HomeScreen extends ConsumerWidget {
       label: 'Add record',
     ),
     const NavItem(
-      screen: IndicatorDetailScreen(metricId: 'bp'),
+      screen: SettingsScreen(),
       icon: Icons.settings_outlined,
       selectedIcon: Icons.settings,
       label: 'Settings',
