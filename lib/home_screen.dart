@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pulse/common/models/nav_item.dart';
 import 'package:pulse/common/widgets/floating_bottom_nav_bar.dart';
+import 'package:pulse/core/tts/tts_provider.dart';
 import 'package:pulse/features/dashboard/dashboard_screen.dart';
 import 'package:pulse/theme/app_colors.dart';
 
@@ -49,6 +50,11 @@ class HomeScreen extends ConsumerWidget {
     ),
   ];
 
+  void _onDestinationSelected(WidgetRef ref, int index) {
+    ref.read(selectedIndexProvider.notifier).setIndex(index);
+    ref.read(ttsServiceProvider).speak(_navItems[index].label);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedIndexProvider);
@@ -64,9 +70,8 @@ class HomeScreen extends ConsumerWidget {
           FloatingBottomNavBar(
             items: _navItems,
             selectedIndex: selectedIndex,
-            onDestinationSelected: (index) {
-              ref.read(selectedIndexProvider.notifier).setIndex(index);
-            },
+            onDestinationSelected: (index) =>
+                _onDestinationSelected(ref, index),
           ),
         ],
       ),

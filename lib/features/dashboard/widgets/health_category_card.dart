@@ -24,7 +24,32 @@ class HealthCategoryCard extends StatelessWidget {
   Color get statusColor {
     if (critical > 0) return AppColors.critical;
     if (review > 0) return AppColors.caution;
-    return AppColors.ok;
+    if (stable > 0) return AppColors.ok;
+    return AppColors.textDisabled;
+  }
+
+  LinearGradient get _cardGradient {
+    Color tint(Color color, double amount) =>
+        Color.lerp(AppColors.surface, color, amount)!;
+
+    if (critical > 0 && review > 0) {
+      return LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          tint(AppColors.caution, 0.28),
+          tint(AppColors.critical, 0.42),
+          tint(AppColors.critical, 0.62),
+        ],
+        stops: const [0.0, 0.32, 1.0],
+      );
+    }
+
+    return LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [AppColors.surface, tint(statusColor, 0.23)],
+    );
   }
 
   @override
@@ -43,14 +68,7 @@ class HealthCategoryCard extends StatelessWidget {
             child: Ink(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    AppColors.surface,
-                    Color.lerp(AppColors.surface, statusColor, 0.23)!,
-                  ],
-                ),
+                gradient: _cardGradient,
                 border: Border.all(color: AppColors.border),
               ),
               child: Padding(

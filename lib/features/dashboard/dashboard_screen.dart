@@ -47,7 +47,7 @@ class DashboardScreen extends ConsumerWidget {
             final availableWidth = constraints.maxWidth;
             final columns = availableWidth < 380 ? 1 : 2;
             final horizontalPadding = availableWidth < 600 ? 16.0 : 28.0;
-            const spacing = 14.0;
+            const spacing = 16.0;
 
             final cardWidth =
                 (availableWidth -
@@ -58,7 +58,7 @@ class DashboardScreen extends ConsumerWidget {
             return SingleChildScrollView(
               padding: EdgeInsets.fromLTRB(
                 horizontalPadding,
-                32,
+                36,
                 horizontalPadding,
                 130,
               ),
@@ -85,7 +85,7 @@ class DashboardScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 44),
                   Wrap(
                     spacing: spacing,
                     runSpacing: spacing,
